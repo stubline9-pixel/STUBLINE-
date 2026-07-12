@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stubline — Earn from everyday tasks</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9627893605261486"
+     crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -173,14 +175,6 @@
   }
   @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
   .modal h3{font-size:1.2rem;margin-bottom:14px;}
-  .survey-q{margin-bottom:16px;}
-  .survey-q p{font-weight:600;font-size:0.92rem;margin-bottom:8px;}
-  .survey-opt{
-    display:block;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;
-    margin-bottom:8px;font-size:0.9rem;cursor:pointer;transition:border-color .15s,background .15s;
-  }
-  .survey-opt:hover{border-color:var(--primary);}
-  .survey-opt.selected{border-color:var(--primary);background:#E1EFE6;}
 
   /* ---------- ACCOUNT ---------- */
   .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:34px;}
@@ -257,10 +251,9 @@
     <div class="hero">
       <div>
         <h1>Small tasks. Real payouts.</h1>
-        <p class="lede">Watch a few ads, answer a few surveys, and cash out your points whenever you cross the minimum. No catch — just simple, honest work you can do in a coffee break.</p>
+        <p class="lede">Watch a few ads and cash out your points whenever you cross the minimum. No catch — just simple, honest work you can do in a coffee break.</p>
         <div class="cta-row">
           <button class="btn btn-primary" onclick="goTo('ads')">Browse ad campaigns</button>
-          <button class="btn btn-ghost" onclick="goTo('surveys')">Take a survey</button>
         </div>
       </div>
       <div class="odometer-card">
@@ -288,7 +281,7 @@
     <div class="card-grid" id="homeOpps"></div>
 
     <div class="how-steps">
-      <div class="step"><div class="num">01</div><h3>Pick a task</h3><p>Choose an ad campaign or survey that fits the time you have.</p></div>
+      <div class="step"><div class="num">01</div><h3>Pick a task</h3><p>Choose an ad campaign that fits the time you have.</p></div>
       <div class="step"><div class="num">02</div><h3>Complete it</h3><p>Watch it through or answer honestly — points post right after.</p></div>
       <div class="step"><div class="num">03</div><h3>Cash out</h3><p>Once you hit the minimum, request a payout to your preferred method.</p></div>
     </div>
@@ -300,14 +293,6 @@
     <h2 class="section-heading">Available ad campaigns</h2>
     <p style="color:var(--ink-soft);margin-top:-14px;margin-bottom:22px;max-width:60ch;font-size:0.92rem;">Ads run for a set number of seconds. Keep the tab open until it finishes to earn your points. Each campaign can be watched once per day.</p>
     <div class="card-grid" id="adsGrid"></div>
-  </section>
-
-  <!-- SURVEYS -->
-  <section class="page" id="page-surveys">
-    <div class="section-label">Surveys</div>
-    <h2 class="section-heading">Partner surveys</h2>
-    <p style="color:var(--ink-soft);margin-top:-14px;margin-bottom:22px;max-width:60ch;font-size:0.92rem;">Answer a short set of questions honestly. Points post as soon as you submit.</p>
-    <div class="card-grid" id="surveysGrid"></div>
   </section>
 
   <!-- ACCOUNT -->
@@ -386,7 +371,7 @@
       <li>To communicate with you about your account or support requests</li>
     </ul>
     <h2>Third parties</h2>
-    <p>Ad and survey partners may receive limited, anonymized completion data solely to verify tasks and issue rewards.</p>
+    <p>Ad partners may receive limited, anonymized completion data solely to verify tasks and issue rewards.</p>
     <h2>Your choices</h2>
     <p>You can request access to or deletion of your data at any time via the Contact page.</p>
   </section>
@@ -399,7 +384,7 @@
     <h2>Eligibility</h2>
     <p>You must be at least 18 years old and provide accurate account information to use Stubline.</p>
     <h2>Earning points</h2>
-    <p>Points are awarded for genuinely completing ads and surveys. Automated activity, multiple accounts, or fraudulent completions will result in forfeited points and account suspension.</p>
+    <p>Points are awarded for genuinely completing ad campaigns. Automated activity, multiple accounts, or fraudulent completions will result in forfeited points and account suspension.</p>
     <h2>Withdrawals</h2>
     <p>Withdrawals are subject to the minimum threshold shown on the Withdraw page and to account verification. Stubline may decline a payout it reasonably believes is fraudulent.</p>
     <h2>Changes</h2>
@@ -425,421 +410,4 @@
   </div>
 </div>
 
-<!-- Survey modal -->
-<div class="modal-overlay" id="surveyModal">
-  <div class="modal">
-    <h3 id="surveyModalTitle">Survey</h3>
-    <div id="surveyQuestions"></div>
-    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:10px;">
-      <button class="btn btn-ghost" onclick="closeSurveyModal()">Cancel</button>
-      <button class="btn btn-primary" id="surveySubmitBtn" onclick="submitSurvey()">Submit</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ---------------- DATA ----------------
-const NAV_ITEMS = [
-  {id:'home', label:'Home'},
-  {id:'ads', label:'Watch Ads'},
-  {id:'surveys', label:'Surveys'},
-  {id:'account', label:'My Account'},
-  {id:'withdraw', label:'Withdraw'},
-  {id:'contact', label:'Contact'},
-];
-
-const ADS = [
-  {id:'ad1', title:'TravelNow: Weekend Getaways', brand:'TravelNow', seconds:8, points:25, color:'#DCEFE4', emoji:'✈️'},
-  {id:'ad2', title:'FreshCart Grocery Delivery', brand:'FreshCart', seconds:6, points:15, color:'#FBEBCB', emoji:'🛒'},
-  {id:'ad3', title:'Nimbus Cloud Storage Plans', brand:'Nimbus', seconds:10, points:30, color:'#E1E9F4', emoji:'☁️'},
-  {id:'ad4', title:'PlayForge Mobile Game', brand:'PlayForge', seconds:12, points:35, color:'#F4E1EC', emoji:'🎮'},
-  {id:'ad5', title:'BrewBox Coffee Subscription', brand:'BrewBox', seconds:7, points:18, color:'#EAE1D6', emoji:'☕'},
-  {id:'ad6', title:'FitTrack Wearables', brand:'FitTrack', seconds:9, points:22, color:'#E1F4E9', emoji:'⌚'},
-];
-
-const SURVEYS = [
-  {id:'s1', title:'Household shopping habits', partner:'Marketview Panel', minutes:3, points:60,
-    questions:[
-      {q:'How often do you grocery shop online?', opts:['Weekly','A few times a month','Rarely','Never']},
-      {q:'What matters most when choosing a store?', opts:['Price','Delivery speed','Product range','Loyalty rewards']},
-    ]},
-  {id:'s2', title:'Streaming service preferences', partner:'ViewPulse', minutes:4, points:70,
-    questions:[
-      {q:'How many streaming services do you subscribe to?', opts:['0','1-2','3-4','5+']},
-      {q:'What drives you to try a new service?', opts:['Original shows','Price','Friend recommendation','Ads (or lack of)']},
-    ]},
-  {id:'s3', title:'Workplace tools survey', partner:'OfficePulse', minutes:5, points:80,
-    questions:[
-      {q:'How do you mostly communicate with your team?', opts:['Email','Chat apps','Video calls','In person']},
-      {q:'Biggest productivity blocker?', opts:['Too many meetings','Unclear priorities','Tool overload','Interruptions']},
-    ]},
-];
-
-// ---------------- STATE ----------------
-let state = {
-  balance: 0,
-  lifetime: 0,
-  history: [],
-  completedAds: {},
-  completedSurveys: {},
-  streak: { count: 0, lastClaim: null }
-};
-
-const REFRESH_MS = 3 * 60 * 1000; // ads & surveys re-open 3 minutes after completion
-
-function isLocked(map, id){
-  const ts = map[id];
-  if(!ts) return false;
-  return (Date.now() - ts) < REFRESH_MS;
-}
-
-const hasClaudeStorage = (typeof window.storage !== 'undefined' && typeof window.storage.get === 'function');
-
-async function loadState(){
-  try{
-    if(hasClaudeStorage){
-      const res = await window.storage.get('gpt_state', false);
-      if(res && res.value) state = JSON.parse(res.value);
-    } else if(typeof localStorage !== 'undefined'){
-      const raw = localStorage.getItem('gpt_state');
-      if(raw) state = JSON.parse(raw);
-    }
-  }catch(e){ /* no existing state yet, defaults stay */ }
-  renderAll();
-}
-
-async function saveState(){
-  try{
-    if(hasClaudeStorage){
-      await window.storage.set('gpt_state', JSON.stringify(state), false);
-    } else if(typeof localStorage !== 'undefined'){
-      localStorage.setItem('gpt_state', JSON.stringify(state));
-    }
-  }catch(e){ console.error('Could not save state', e); }
-}
-
-// ---------------- NAV ----------------
-let currentPage = 'home';
-function buildNav(){
-  const nav = document.getElementById('nav');
-  nav.innerHTML = '';
-  NAV_ITEMS.forEach(item=>{
-    const btn = document.createElement('button');
-    btn.textContent = item.label;
-    btn.id = 'navbtn-'+item.id;
-    btn.onclick = ()=>goTo(item.id);
-    nav.appendChild(btn);
-  });
-}
-function goTo(pageId){
-  currentPage = pageId;
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+pageId).classList.add('active');
-  NAV_ITEMS.forEach(item=>{
-    const btn = document.getElementById('navbtn-'+item.id);
-    if(btn) btn.classList.toggle('active', item.id===pageId);
-  });
-  window.scrollTo({top:0, behavior:'instant'});
-}
-
-// ---------------- RENDER ----------------
-function fmt(n){ return n.toLocaleString('en-US'); }
-
-function renderAll(){
-  document.getElementById('navBalance').textContent = fmt(state.balance);
-  document.getElementById('homeOdometer').textContent = fmt(state.balance);
-  document.getElementById('homeUsd').textContent = '$'+(state.balance/100).toFixed(2);
-  document.getElementById('acctBalance').textContent = fmt(state.balance);
-  document.getElementById('acctLifetime').textContent = fmt(state.lifetime);
-  document.getElementById('acctTasks').textContent = fmt(state.history.filter(h=>h.points>0).length);
-  document.getElementById('wBalance').textContent = fmt(state.balance)+' pts';
-
-  renderHomeOpps();
-  renderAdsGrid();
-  renderSurveysGrid();
-  renderHistory();
-  renderStreak();
-}
-
-function todayStr(){
-  return new Date().toISOString().slice(0,10);
-}
-
-function renderStreak(){
-  const claimedToday = state.streak.lastClaim === todayStr();
-  const dayInCycle = state.streak.count > 0 ? ((state.streak.count - 1) % 7) + 1 : 0;
-
-  document.getElementById('streakCount').textContent = state.streak.count;
-  const btn = document.getElementById('streakBtn');
-  btn.disabled = claimedToday;
-  btn.textContent = claimedToday ? 'Claimed for today' : (dayInCycle === 6 ? 'Claim day 7 bonus' : 'Claim +20 pts');
-
-  const daysWrap = document.getElementById('streakDays');
-  daysWrap.innerHTML = '';
-  for(let i=1; i<=7; i++){
-    const box = document.createElement('div');
-    box.className = 'streak-day' + (i===7 ? ' bonus' : '') + (i<=dayInCycle ? ' filled' : '');
-    box.textContent = i;
-    daysWrap.appendChild(box);
-  }
-}
-
-function claimStreak(){
-  const today = todayStr();
-  if(state.streak.lastClaim === today) return;
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
-  state.streak.count = (state.streak.lastClaim === yesterday) ? state.streak.count + 1 : 1;
-  state.streak.lastClaim = today;
-  const dayInCycle = ((state.streak.count - 1) % 7) + 1;
-  const isBonusDay = dayInCycle === 7;
-  const reward = isBonusDay ? 50 : 20;
-  const label = isBonusDay
-    ? 'Day 7 streak bonus (week complete!)'
-    : 'Daily streak bonus (day '+dayInCycle+' of 7)';
-  addHistory('Streak', label, reward);
-}
-
-function renderHomeOpps(){
-  const wrap = document.getElementById('homeOpps');
-  wrap.innerHTML = '';
-  const picks = [...ADS.slice(0,2), SURVEYS[0]];
-  picks.forEach(item=>{
-    const isAd = !!item.seconds;
-    const card = document.createElement('div');
-    card.className = 'opp-card';
-    card.innerHTML = `
-      <div class="opp-icon" style="background:${isAd?item.color:'#E1E9F4'}">${isAd?item.emoji:'📋'}</div>
-      <h3>${item.title}</h3>
-      <div class="opp-meta">${isAd? item.seconds+'s watch · '+item.brand : item.minutes+' min · '+item.partner}</div>
-      <div class="opp-reward">+${item.points} pts</div>
-    `;
-    card.style.cursor='pointer';
-    card.onclick = ()=> goTo(isAd?'ads':'surveys');
-    wrap.appendChild(card);
-  });
-}
-
-function renderAdsGrid(){
-  const grid = document.getElementById('adsGrid');
-  grid.innerHTML = '';
-  ADS.forEach(ad=>{
-    const done = isLocked(state.completedAds, ad.id);
-    const card = document.createElement('div');
-    card.className = 'task-card';
-    card.innerHTML = `
-      <div class="task-thumb" style="background:${ad.color}">${ad.emoji}</div>
-      <div class="task-top">
-        <div>
-          <h3 style="font-size:0.98rem;">${ad.title}</h3>
-          <div class="opp-meta">${ad.brand} · ${ad.seconds}s</div>
-        </div>
-        <span class="tag ${done?'tag-done':'tag-new'}">${done?'Refreshes soon':'New'}</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span class="opp-reward">+${ad.points} pts</span>
-        <button class="btn btn-primary" ${done?'disabled':''} onclick="startAd('${ad.id}')">${done?'Completed':'Watch ad'}</button>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-function renderSurveysGrid(){
-  const grid = document.getElementById('surveysGrid');
-  grid.innerHTML = '';
-  SURVEYS.forEach(s=>{
-    const done = isLocked(state.completedSurveys, s.id);
-    const card = document.createElement('div');
-    card.className = 'task-card';
-    card.innerHTML = `
-      <div class="task-top">
-        <div>
-          <h3 style="font-size:0.98rem;">${s.title}</h3>
-          <div class="opp-meta">${s.partner} · ~${s.minutes} min</div>
-        </div>
-        <span class="tag ${done?'tag-done':'tag-new'}">${done?'Refreshes soon':'New'}</span>
-      </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span class="opp-reward">+${s.points} pts</span>
-        <button class="btn btn-primary" ${done?'disabled':''} onclick="startSurvey('${s.id}')">${done?'Completed':'Start survey'}</button>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
-}
-
-function renderHistory(){
-  const body = document.getElementById('historyBody');
-  body.innerHTML = '';
-  if(state.history.length===0){
-    body.innerHTML = '<tr class="empty-row"><td colspan="4">No tasks yet — head to Watch Ads or Surveys to get started.</td></tr>';
-    return;
-  }
-  [...state.history].reverse().forEach(h=>{
-    const row = document.createElement('tr');
-    row.innerHTML = `<td>${h.date}</td><td>${h.type}</td><td>${h.desc}</td><td class="${h.points>=0?'pts-pos':'pts-neg'}">${h.points>=0?'+':''}${h.points}</td>`;
-    body.appendChild(row);
-  });
-}
-
-function addHistory(type, desc, points){
-  const date = new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-  state.history.push({date, type, desc, points});
-  state.balance += points;
-  if(points>0) state.lifetime += points;
-  saveState();
-  renderAll();
-}
-
-// ---------------- WATCH ADS ----------------
-let adTimer = null;
-function startAd(adId){
-  const ad = ADS.find(a=>a.id===adId);
-  if(!ad || isLocked(state.completedAds, adId)) return;
-  document.getElementById('adModalTitle').textContent = ad.title;
-  document.getElementById('adModalSub').textContent = ad.brand+' · keep this open until it finishes';
-  document.getElementById('adModal').classList.add('active');
-  let elapsed = 0;
-  const total = ad.seconds;
-  const bar = document.getElementById('adProgressBar');
-  const timeLeft = document.getElementById('adTimeLeft');
-  bar.style.width='0%';
-  timeLeft.textContent = total+'s left';
-  adTimer = setInterval(()=>{
-    elapsed += 0.2;
-    const pct = Math.min(100, (elapsed/total)*100);
-    bar.style.width = pct+'%';
-    timeLeft.textContent = Math.max(0, Math.ceil(total-elapsed))+'s left';
-    if(elapsed>=total){
-      clearInterval(adTimer);
-      closeAdModal();
-      state.completedAds[adId] = Date.now();
-      addHistory('Ad', ad.title, ad.points);
-    }
-  }, 200);
-}
-function closeAdModal(){
-  if(adTimer) clearInterval(adTimer);
-  document.getElementById('adModal').classList.remove('active');
-}
-
-// ---------------- SURVEYS ----------------
-let activeSurvey = null;
-let surveyAnswers = {};
-function startSurvey(sid){
-  const s = SURVEYS.find(x=>x.id===sid);
-  if(!s || isLocked(state.completedSurveys, sid)) return;
-  activeSurvey = s;
-  surveyAnswers = {};
-  document.getElementById('surveyModalTitle').textContent = s.title;
-  const qWrap = document.getElementById('surveyQuestions');
-  qWrap.innerHTML = '';
-  s.questions.forEach((q,qi)=>{
-    const qDiv = document.createElement('div');
-    qDiv.className = 'survey-q';
-    qDiv.innerHTML = `<p>${q.q}</p>`;
-    q.opts.forEach(opt=>{
-      const optDiv = document.createElement('div');
-      optDiv.className = 'survey-opt';
-      optDiv.textContent = opt;
-      optDiv.onclick = ()=>{
-        qDiv.querySelectorAll('.survey-opt').forEach(o=>o.classList.remove('selected'));
-        optDiv.classList.add('selected');
-        surveyAnswers[qi] = opt;
-      };
-      qDiv.appendChild(optDiv);
-    });
-    qWrap.appendChild(qDiv);
-  });
-  document.getElementById('surveyModal').classList.add('active');
-}
-function closeSurveyModal(){
-  document.getElementById('surveyModal').classList.remove('active');
-  activeSurvey = null;
-}
-function submitSurvey(){
-  if(!activeSurvey) return;
-  if(Object.keys(surveyAnswers).length < activeSurvey.questions.length){
-    alert('Please answer every question before submitting.');
-    return;
-  }
-  state.completedSurveys[activeSurvey.id] = Date.now();
-  addHistory('Survey', activeSurvey.title, activeSurvey.points);
-  closeSurveyModal();
-}
-
-// ---------------- WITHDRAW ----------------
-function updateDestField(){
-  const method = document.getElementById('wMethod').value;
-  const label = document.getElementById('wDestLabel');
-  const input = document.getElementById('wDest');
-  if(method === 'PayPal'){
-    label.textContent = 'PayPal email';
-    input.placeholder = 'you@example.com';
-  } else if(method === 'Phone number'){
-    label.textContent = 'Phone number';
-    input.placeholder = '+1 555 123 4567';
-  } else if(method === 'Bank transfer'){
-    label.textContent = 'Bank account / IBAN';
-    input.placeholder = 'Account or IBAN number';
-  } else {
-    label.textContent = 'Email to receive gift card';
-    input.placeholder = 'you@example.com';
-  }
-}
-function submitWithdrawal(){
-  const amount = parseInt(document.getElementById('wAmount').value, 10);
-  const dest = document.getElementById('wDest').value.trim();
-  const method = document.getElementById('wMethod').value;
-  const banner = document.getElementById('wBanner');
-  banner.className = 'banner';
-  if(!amount || amount < 1000){
-    banner.textContent = 'Minimum withdrawal is 1,000 points.';
-    banner.classList.add('error');
-    return;
-  }
-  if(amount > state.balance){
-    banner.textContent = "You don't have enough points for that amount.";
-    banner.classList.add('error');
-    return;
-  }
-  if(!dest){
-    banner.textContent = 'Please enter a payout destination.';
-    banner.classList.add('error');
-    return;
-  }
-  addHistory('Withdrawal', method+' payout requested', -amount);
-  banner.textContent = `Payout request for ${fmt(amount)} pts via ${method} submitted. We'll process it within 3–5 business days.`;
-  banner.classList.add('success');
-  document.getElementById('wAmount').value = '';
-  document.getElementById('wDest').value = '';
-}
-
-// ---------------- CONTACT ----------------
-function submitContact(){
-  const name = document.getElementById('cName').value.trim();
-  const email = document.getElementById('cEmail').value.trim();
-  const msg = document.getElementById('cMsg').value.trim();
-  const banner = document.getElementById('cBanner');
-  banner.className = 'banner';
-  if(!name || !email || !msg){
-    banner.textContent = 'Please fill in every field before sending.';
-    banner.classList.add('error');
-    return;
-  }
-  banner.textContent = "Thanks — your message has been sent. We'll reply within 1–2 business days.";
-  banner.classList.add('success');
-  document.getElementById('cName').value='';
-  document.getElementById('cEmail').value='';
-  document.getElementById('cMsg').value='';
-}
-
-// ---------------- INIT ----------------
-buildNav();
-goTo('home');
-loadState();
-setInterval(()=>{ renderAdsGrid(); renderSurveysGrid(); }, 5000);
-</script>
-
-</body>
-</html>
+<
